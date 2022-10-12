@@ -1,0 +1,20 @@
+server:
+  port: 8023
+spring:
+  application:
+    name: snowflake-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: http://127.0.0.1:8848
+        username: mycloud
+        password: mycloud
+        namespace: mycloud-dev
+
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:8858
+      web-context-unify: false #默认将调用链路收敛
+
+datacenterId: 1
+machineId: 1

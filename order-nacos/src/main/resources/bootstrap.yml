@@ -1,0 +1,88 @@
+spring:
+  application:
+    name: order-service
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+        username: mycloud
+        password: mycloud
+        namespace: mycloud-dev
+        group: DEFAULT_GROUP
+
+        #profiles > 默认服务名 > extension-configs（下标越大优先级越高） > shared-configs（下标越大优先级越高）
+        #优先级高的会覆盖优先级低的属性
+        #如果要在特定范围内（⽐如某个应⽤上）覆盖某个共享dataId上的特定属性，请使⽤ extension-config
+        #⽐如，其他应⽤的数据库url，都是⼀个固定的url，使⽤shared-configs.dataId = mysql的共享配置。但其中有⼀个应⽤ddd-demo是特例，需要为该应⽤配置扩展属性来覆盖。
+        shared-configs:
+          - data-id: order.yml # 配置文件名-Data Id，Data Id必须写后缀
+            group: DEFAULT_GROUP   # 默认为DEFAULT_GROUP
+            refresh: true   # 是否动态刷新，默认为false
+
+      discovery:
+        server-addr: http://127.0.0.1:8848
+        username: mycloud
+        password: mycloud
+        namespace: mycloud-dev
+
+
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:8858
+      web-context-unify: false #默认将调用链路收敛
+      datasource:
+        flow-rule: #可以自定义
+          nacos:
+            server-addr: http://127.0.0.1:8848
+            username: nacos
+            password: nacos
+            namespace: mycloud-dev
+            groupId: DEFAULT_GROUP
+            dataId: order-flow-rule
+            ruleType: flow # flow代表流程控制，degrade代表熔断规则
+            dataType: json
+
+    alibaba:
+      seata:
+        tx-service-group: dongguan
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+    # 连接超时时间（毫秒）
+    timeout: 10000
+    pool:
+      # 连接池中的最大空闲连接
+      max-idle: 30
+      # 连接池中的最小空闲连接
+      min-idle: 20
+      # 连接池最大连接数（使用负值表示没有限制）
+      max-active: -1
+      # 连接池最大阻塞等待时间（使用负值表示没有限制）
+      max-wait: -1
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 3600000  #设置存活时间毫秒
+      #key-prefix: CACHE_    #key前缀 如果制定了前缀就用指定的前缀，如果没有就默认使用缓存的名字作为前缀
+      use-key-prefix: true  # 是否使用前缀
+      cache-null-values: true # 是否缓存控制 解决缓存穿透
+
+seata:
+  registry:
+    type: nacos
+    nacos:
+      server-addr: 127.0.0.1:8848
+      application: seata-server
+      username: nacos
+      password: nacos
+      group: SEATA_GROUP
+  config:
+    type: nacos
+    nacos:
+      server-addr: 127.0.0.1:8848
+      username: nacos
+      password: nacos
+      group: SEATA_GROUP

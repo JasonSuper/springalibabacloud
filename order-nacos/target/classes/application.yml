@@ -1,0 +1,29 @@
+server:
+  port: 8020
+
+ribbon:
+  eager-load:
+    enabled: true
+    clients: stock-service # 必须设置，设置哪个feign client 饥饿加载哪个，不设置则没有任何feign客户端会被饥饿加载eg:@FeignClient(value = "order-center")
+
+#注解模式使用@RibbonClients
+stock-service:
+  ribbon:
+    NFLoadBalancerRuleClassName: com.mycloud.ribbon.rule.MyCustomRule
+
+logging:
+  level:
+    com.mycloud.ordernacos.service: debug
+
+feign:
+  sentinel:
+    enabled: true
+#  client:
+#    config:
+#      stock-service: #针对的服务提供者
+#        loggerLevel: FULL
+#        #contract: fegin.Contract.Default #契约模式。还原fegin原生注解
+#        connectTimeout: 5000 #连接超时时间，默认2s
+#        readTimeout: 30000 #处理超时时间，默认5s
+#        requestInterceptors[0]:
+#          com.mycloud.ordernacos.interceptor.feign.CustomFeignInterceptor

@@ -129,4 +129,8 @@ public class EsController {
 
         return new PageImpl<>(blogs, pageRequest, searchHits.getTotalHits());
     }
+
+    public void test() {
+
+    }
 }

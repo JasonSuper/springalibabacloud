@@ -52,6 +52,13 @@
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!--<dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson-spring-boot-starter</artifactId>
@@ -84,6 +91,30 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+                <version>2.3.12.RELEASE</version>
+            </dependency>
+
+            <!--<dependency>
+                <groupId>co.elastic.clients</groupId>
+                <artifactId>elasticsearch-java</artifactId>
+                <version>8.4.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>2.13.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.glassfish</groupId>
+                <artifactId>jakarta.json</artifactId>
+                <version>2.0.1</version>
+            </dependency>-->
         </dependencies>
     </dependencyManagement>
 

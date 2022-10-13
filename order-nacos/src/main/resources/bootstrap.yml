@@ -70,6 +70,10 @@ spring:
       use-key-prefix: true  # 是否使用前缀
       cache-null-values: true # 是否缓存控制 解决缓存穿透
 
+  elasticsearch:
+    rest:
+      uris: 127.0.0.1:9200
+
 seata:
   registry:
     type: nacos

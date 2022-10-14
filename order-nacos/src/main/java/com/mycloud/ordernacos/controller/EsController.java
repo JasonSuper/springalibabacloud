@@ -3,8 +3,13 @@ package com.mycloud.ordernacos.controller;
 import com.alibaba.cloud.commons.lang.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.mycloud.ordernacos.vo.Goods;
+import com.mycloud.ordernacos.vo.MyIndex;
+import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.data.domain.Page;
@@ -15,6 +20,7 @@ import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.document.Document;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
+import org.springframework.data.elasticsearch.core.query.HighlightQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.UpdateQuery;
@@ -103,28 +109,37 @@ public class EsController {
      * 分页排序 和 去重
      */
     @RequestMapping("pageAndSort")
-    public Page<Goods> pageAndSort(String name) {
+    public Page<MyIndex> pageAndSort(String title) {
         PageRequest pageRequest = PageRequest.of(0, 2);
 
         NativeSearchQueryBuilder query = new NativeSearchQueryBuilder();
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 
-        if (StringUtils.isNotBlank(name)) {
-            boolQueryBuilder.must(QueryBuilders.matchQuery("name", name));
+        if (StringUtils.isNotBlank(title)) {
+            boolQueryBuilder.must(QueryBuilders.matchQuery("title", title));
         }
 
+        boolQueryBuilder.must(QueryBuilders.matchQuery("auth", "已死之人"));
+
+        RangeQueryBuilder rangeQueryBuilder = new RangeQueryBuilder("price");
+        rangeQueryBuilder.gte("50").lte("100");
+
         query.withQuery(boolQueryBuilder);
+        query.withFilter(rangeQueryBuilder);
         query.withPageable(pageRequest);
         query.withSort(SortBuilders.fieldSort("price").order(SortOrder.DESC));
 
-        // 去重的字段不能是text类型。所以，price的mapping要有keyword，且通过price.keyword去重。
-        query.withCollapseField("price.keyword");
+        // 去重的字段不能是text类型。所以，price的mapping要有keyword，且通过price去重。
+        query.withCollapseField("price");
 
-        SearchHits<Goods> searchHits = esTemplate.search(query.build(), Goods.class);
+        // 高亮price属性，有个小坑，只有作为查询条件的字段，才会高亮
+        query.withHighlightBuilder(new HighlightBuilder().field("auth"));
 
-        List<Goods> blogs = new ArrayList<>();
-        for (SearchHit<Goods> searchHit : searchHits) {
-            blogs.add(searchHit.getContent());
+        SearchHits<MyIndex> searchHits = esTemplate.search(query.build(), MyIndex.class);
+
+        List<MyIndex> blogs = new ArrayList<>();
+        for (SearchHit<MyIndex> searchHit : searchHits) {
+            blogs.add(searchHit.getContent()); // 高亮不在content属性里，这里会导致高亮属性丢失。在searchHit.getHighlightFields()里
         }
 
         return new PageImpl<>(blogs, pageRequest, searchHits.getTotalHits());

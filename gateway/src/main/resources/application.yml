@@ -8,17 +8,17 @@ spring:
   cloud:
     sentinel:
       transport:
-        dashboard: 127.0.0.1:8858
+        dashboard: 192.168.1.19:8858
     nacos:
       config:
-        server-addr: 127.0.0.1:8848
+        server-addr: 192.168.1.19:8848
         username: mycloud
         password: mycloud
         namespace: mycloud-dev
         group: DEFAULT_GROUP
 
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 192.168.1.19:8848
         username: nacos
         password: nacos
         namespace: mycloud-dev
@@ -32,8 +32,8 @@ spring:
           #断言 路由规则匹配
           #predicates:
             #- Path=/order-server/**
-            # http://http://127.0.0.1:8088/order-server/order/add 路由到↓
-            # http://http://127.0.0.1:8020/order-server/order/add
+            # http://http://192.168.1.19:8088/order-server/order/add 路由到↓
+            # http://http://192.168.1.19:8020/order-server/order/add
             #- Method=GET
             #- Query=name,jack
             #- Query=sex,1
@@ -42,7 +42,7 @@ spring:
           #过滤器
           #filters:
             #- StripPrefix=1 #转发之前去掉第一层路径
-            # http://http://127.0.0.1:8020/order/add
+            # http://http://192.168.1.19:8020/order/add
             #- My=jack #自定义局部过滤器，只有值为jack才通过
 
 # 这个地方独立配置, 是网关的数据, 代码 GatewayConfig.java 中读取被监听

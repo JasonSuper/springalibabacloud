@@ -16,7 +16,7 @@ public class OrderController {
     @RequestMapping("/add")
     public String add() {
         System.out.println("下单成功！");
-        String msg = restTemplate.getForObject("http://127.0.0.1:8090/stock/reduce", String.class);
+        String msg = restTemplate.getForObject("http://192.168.1.19:8090/stock/reduce", String.class);
         System.out.println("order:" + msg);
         return "下单成功！";
     }

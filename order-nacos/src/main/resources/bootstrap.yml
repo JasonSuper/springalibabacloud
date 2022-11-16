@@ -4,7 +4,7 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: 127.0.0.1:8848
+        server-addr: 192.168.1.19:8848
         username: mycloud
         password: mycloud
         namespace: mycloud-dev
@@ -20,7 +20,7 @@ spring:
             refresh: true   # 是否动态刷新，默认为false
 
       discovery:
-        server-addr: http://127.0.0.1:8848
+        server-addr: http://192.168.1.19:8848
         username: mycloud
         password: mycloud
         namespace: mycloud-dev
@@ -28,12 +28,12 @@ spring:
 
     sentinel:
       transport:
-        dashboard: 127.0.0.1:8858
+        dashboard: 192.168.1.19:8858
       web-context-unify: false #默认将调用链路收敛
       datasource:
         flow-rule: #可以自定义
           nacos:
-            server-addr: http://127.0.0.1:8848
+            server-addr: http://192.168.1.19:8848
             username: nacos
             password: nacos
             namespace: mycloud-dev
@@ -47,7 +47,7 @@ spring:
         tx-service-group: dongguan
 
   redis:
-    host: 127.0.0.1
+    host: 192.168.1.19
     port: 6379
     password: 123456
     # 连接超时时间（毫秒）
@@ -72,17 +72,17 @@ spring:
 
   elasticsearch:
     rest:
-      uris: 127.0.0.1:9200
+      uris: 192.168.1.19:9200
 
   data:
     mongodb:
-      uri: mongodb://root:123456@127.0.0.1:27017/mydb
+      uri: mongodb://root:123456@192.168.1.19:27017/mydb
 
 seata:
   registry:
     type: nacos
     nacos:
-      server-addr: 127.0.0.1:8848
+      server-addr: 192.168.1.19:8848
       application: seata-server
       username: nacos
       password: nacos
@@ -90,7 +90,7 @@ seata:
   config:
     type: nacos
     nacos:
-      server-addr: 127.0.0.1:8848
+      server-addr: 192.168.1.19:8848
       username: nacos
       password: nacos
       group: SEATA_GROUP

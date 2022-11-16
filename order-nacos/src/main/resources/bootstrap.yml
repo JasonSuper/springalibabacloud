@@ -74,6 +74,10 @@ spring:
     rest:
       uris: 127.0.0.1:9200
 
+  data:
+    mongodb:
+      uri: mongodb://root:123456@127.0.0.1:27017/mydb
+
 seata:
   registry:
     type: nacos
